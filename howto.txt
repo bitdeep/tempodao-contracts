@@ -1,0 +1,120 @@
+deployment start
+
+OlympusERC20Token
+no constructor arguments
+
+sOlympus
+no constructor arguments
+
+OlympusStaking
+no constructor arguments
+
+OlympusStaking
+constructor arguments
+Arg [0] : _OHM (address): OlympusERC20Token
+Arg [1] : _sOHM (address): sOlympus
+Arg [2] : _epochLength (uint256): 28800
+Arg [3] : _firstEpochNumber (uint256): 0
+Arg [4] : _firstEpochBlock (uint256): 9602538
+
+StakingHelper
+constructor arguments
+Arg [0] : _staking (address): OlympusStaking
+Arg [1] : _OHM (address): OlympusERC20Token
+
+OlympusTreasury
+constructor arguments
+Arg [0] : _OHM (address): OlympusERC20Token
+Arg [1] : _DAI (address): DAI_token_address
+Arg [2] : _blocksNeededForQueue (uint256): 0
+
+StakingWarmup
+constructor arguments
+Arg [0] : _staking (address): OlympusStaking
+Arg [1] : _sOHM (address): sOlympus
+
+OlympusDAO
+no constructor arguments
+
+OlympusBondingCalculator
+constructor arguments
+Arg [0] : _OHM (address): OlympusERC20Token
+
+OlympusTreasury
+constructor arguments
+Arg [0] : _OHM (address): OlympusERC20Token
+Arg [1] : _DAI (address): DAI_token_address
+Arg [2] : _blocksNeededForQueue (uint256): Blocks/timelock
+
+OlympusBondDepository
+constructor arguments
+Arg [0] : _OHM (address): OlympusERC20Token
+Arg [1] : _principle (address): LP OHM/DAI
+Arg [2] : _treasury (address): OlympusTreasury
+Arg [3] : _DAO (address): OlympusDAO
+Arg [4] : _bondCalculator (address): OlympusBondingCalculator
+
+Distributor
+constructor arguments
+Arg [0] : _treasury (address): OlympusTreasury
+Arg [1] : _ohm (address): OlympusERC20Token
+Arg [2] : _epochLength (uint256): 28800
+Arg [3] : _nextEpochBlock (uint256): 9608705
+
+OHMCirculatingSupplyContract
+constructor arguments
+Arg [0] : _owner (address): msg.sender
+
+RedeemHelper
+no constructor arguments
+
+deployment end
+
+function calls start
+
+RedeemHelper
+Function: addBondContract(address _bond) OlympusBondDepository
+
+OHMCirculatingSupplyContract
+Function: initialize(address _ohm) OlympusERC20Token
+Function: setNonCirculatingOHMAddresses(address[] _nonCirculatingAddresses) OlympusDAO
+
+Distributor
+addRecipient(address _recipient, uint256 _rewardRate) OlympusStaking, 3464
+Function: distribute()
+
+OlympusBondDepository
+Function: initializeBondTerms(uint256 _controlVariable, uint256 _vestingTerm, uint256 _minimumPrice, uint256 _maxPayout, uint256 _fee, uint256 _maxDebt, uint256 _initialDebt)
+    200, 432000, 12000, 500, 10000, 1000000000000000000000000, 0
+Function: setBondTerms(uint8 _parameter, uint256 _input) 1,1000
+Function: setStaking(address _staking, bool _helper) StakingHelper, true
+
+OlympusTreasury
+Function: queue(uint8 _managing, address _address) 0, msg.sender
+Function: toggle(uint8 _managing, address _address, address _calculator) 0, msg.sender, msg.sender
+
+Function: queue(uint8 _managing, address _address) 4, msg.sender
+Function: toggle(uint8 _managing, address _address, address _calculator) 4, msg.sender, msg.sender
+
+Function: queue(uint8 _managing, address _address) 8, OlympusBondingCalculator
+Function: queue(uint8 _managing, address _address) 4, OlympusBondingCalculator
+Function: toggle(uint8 _managing, address _address, address _calculator) 4, OlympusBondingCalculator, OlympusBondingCalculator
+Function: queue(uint8 _managing, address _address) 0, OlympusBondDepository
+Function: toggle(uint8 _managing, address _address, address _calculator) 0, OlympusBondDepository, OlympusBondDepository
+Function: queue(uint8 _managing, address _address) 8, Distributor
+Function: toggle(uint8 _managing, address _address, address _calculator)  8, Distributor, Distributor
+Function: queue(uint8 _managing, address _address) 8, OlympusBondingCalculator
+Function: toggle(uint8 _managing, address _address, address _calculator)  8, OlympusBondingCalculator, OlympusBondingCalculator
+
+OlympusStaking
+Function: setContract(uint8 _contract, address _address) 1, StakingWarmup
+Function: setContract(uint8 _contract, address _address) 0, Distributor
+
+sOlympus
+Function: initialize(address stakingContract_) OlympusStaking
+Function: setIndex(uint256 _INDEX) 1000000000
+
+OlympusERC20Token
+Function: setVault(address vault_) OlympusTreasury
+
+function calls end

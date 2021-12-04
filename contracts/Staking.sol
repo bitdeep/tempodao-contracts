@@ -1,4 +1,23 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+/*
+
+
+    TempoDAO
+
+    - Website:  https://tempodao.gg/
+    - Medium: https://tempodao.medium.com/
+    - Twitter: https://twitter.com/TempoDAO
+    - Github:  https://github.com/TempoDAO/tempo-presale
+    - Vimeo: https://vimeo.com/user158713109 (AMAs, etc)
+    - Buy TEMPO: https://tinyurl.com/tempodaobuy
+    - Live chart: https://dexscreener.com/avalanche/0x720dd9292b3d0dd78c9afa57afd948c2ea2d50d8
+    - Contract: https://snowtrace.io/address/0x1Cb0912A2c3D112a72F1E2D654F390C1C349938d#writeContract
+    - CMC: https://coinmarketcap.com/currencies/tempo-dao/
+
+*/
+
+// SPDX-License-Identifier: MIT
+
+
 pragma solidity 0.7.5;
 
 library SafeMath {
@@ -469,9 +488,9 @@ interface IOwnable {
   function manager() external view returns (address);
 
   function renounceManagement() external;
-  
+
   function pushManagement( address newOwner_ ) external;
-  
+
   function pullManagement() external;
 }
 
@@ -507,7 +526,7 @@ contract Ownable is IOwnable {
         emit OwnershipPushed( _owner, newOwner_ );
         _newOwner = newOwner_;
     }
-    
+
     function pullManagement() public virtual override {
         require( msg.sender == _newOwner, "Ownable: must be new owner to pull");
         emit OwnershipPulled( _owner, _newOwner );
@@ -525,7 +544,7 @@ interface IsOHM {
     function gonsForBalance( uint amount ) external view returns ( uint );
 
     function balanceForGons( uint gons ) external view returns ( uint );
-    
+
     function index() external view returns ( uint );
 }
 
@@ -554,16 +573,16 @@ contract OlympusStaking is Ownable {
     Epoch public epoch;
 
     address public distributor;
-    
+
     address public locker;
     uint public totalBonus;
-    
+
     address public warmupContract;
     uint public warmupPeriod;
-    
-    constructor ( 
-        address _OHM, 
-        address _sOHM, 
+
+    constructor (
+        address _OHM,
+        address _sOHM,
         uint _epochLength,
         uint _firstEpochNumber,
         uint _firstEpochBlock
@@ -572,7 +591,7 @@ contract OlympusStaking is Ownable {
         OHM = _OHM;
         require( _sOHM != address(0) );
         sOHM = _sOHM;
-        
+
         epoch = Epoch({
             length: _epochLength,
             number: _firstEpochNumber,
@@ -596,7 +615,7 @@ contract OlympusStaking is Ownable {
      */
     function stake( uint _amount, address _recipient ) external returns ( bool ) {
         rebase();
-        
+
         IERC20( OHM ).safeTransferFrom( msg.sender, address(this), _amount );
 
         Claim memory info = warmupInfo[ _recipient ];
@@ -608,7 +627,7 @@ contract OlympusStaking is Ownable {
             expiry: epoch.number.add( warmupPeriod ),
             lock: false
         });
-        
+
         IERC20( sOHM ).safeTransfer( warmupContract, _amount );
         return true;
     }
@@ -674,7 +693,7 @@ contract OlympusStaking is Ownable {
 
             epoch.endBlock = epoch.endBlock.add( epoch.length );
             epoch.number++;
-            
+
             if ( distributor != address(0) ) {
                 IDistributor( distributor ).distribute();
             }
@@ -735,7 +754,7 @@ contract OlympusStaking is Ownable {
             locker = _address;
         }
     }
-    
+
     /**
      * @notice set warmup period for new stakers
      * @param _warmupPeriod uint

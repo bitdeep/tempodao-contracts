@@ -1,99 +1,121 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+/*
+
+
+    TempoDAO
+
+    - Website:  https://tempodao.gg/
+    - Medium: https://tempodao.medium.com/
+    - Twitter: https://twitter.com/TempoDAO
+    - Github:  https://github.com/TempoDAO/tempo-presale
+    - Vimeo: https://vimeo.com/user158713109 (AMAs, etc)
+    - Buy TEMPO: https://tinyurl.com/tempodaobuy
+    - Live chart: https://dexscreener.com/avalanche/0x720dd9292b3d0dd78c9afa57afd948c2ea2d50d8
+    - Contract: https://snowtrace.io/address/0x1Cb0912A2c3D112a72F1E2D654F390C1C349938d#writeContract
+    - CMC: https://coinmarketcap.com/currencies/tempo-dao/
+
+
+
+
+*/
+// SPDX-License-Identifier: MIT
+
+
 pragma solidity 0.7.5;
 
 library EnumerableSet {
 
-  // To implement this library for multiple types with as little code
-  // repetition as possible, we write it in terms of a generic Set type with
-  // bytes32 values.
-  // The Set implementation uses private functions, and user-facing
-  // implementations (such as AddressSet) are just wrappers around the
-  // underlying Set.
-  // This means that we can only create new EnumerableSets for types that fit
-  // in bytes32.
-  struct Set {
-    // Storage of set values
-    bytes32[] _values;
+    // To implement this library for multiple types with as little code
+    // repetition as possible, we write it in terms of a generic Set type with
+    // bytes32 values.
+    // The Set implementation uses private functions, and user-facing
+    // implementations (such as AddressSet) are just wrappers around the
+    // underlying Set.
+    // This means that we can only create new EnumerableSets for types that fit
+    // in bytes32.
+    struct Set {
+        // Storage of set values
+        bytes32[] _values;
 
-    // Position of the value in the `values` array, plus 1 because index 0
-    // means a value is not in the set.
-    mapping (bytes32 => uint256) _indexes;
-  }
+        // Position of the value in the `values` array, plus 1 because index 0
+        // means a value is not in the set.
+        mapping(bytes32 => uint256) _indexes;
+    }
 
-  /**
-   * @dev Add a value to a set. O(1).
+    /**
+     * @dev Add a value to a set. O(1).
    *
    * Returns true if the value was added to the set, that is if it was not
    * already present.
    */
-  function _add(Set storage set, bytes32 value) private returns (bool) {
-    if (!_contains(set, value)) {
-      set._values.push(value);
-      // The value is stored at length-1, but we add 1 to all indexes
-      // and use 0 as a sentinel value
-      set._indexes[value] = set._values.length;
-      return true;
-    } else {
-      return false;
+    function _add(Set storage set, bytes32 value) private returns (bool) {
+        if (!_contains(set, value)) {
+            set._values.push(value);
+            // The value is stored at length-1, but we add 1 to all indexes
+            // and use 0 as a sentinel value
+            set._indexes[value] = set._values.length;
+            return true;
+        } else {
+            return false;
+        }
     }
-  }
 
-  /**
-   * @dev Removes a value from a set. O(1).
+    /**
+     * @dev Removes a value from a set. O(1).
    *
    * Returns true if the value was removed from the set, that is if it was
    * present.
    */
-  function _remove(Set storage set, bytes32 value) private returns (bool) {
-    // We read and store the value's index to prevent multiple reads from the same storage slot
-    uint256 valueIndex = set._indexes[value];
+    function _remove(Set storage set, bytes32 value) private returns (bool) {
+        // We read and store the value's index to prevent multiple reads from the same storage slot
+        uint256 valueIndex = set._indexes[value];
 
-    if (valueIndex != 0) { // Equivalent to contains(set, value)
-      // To delete an element from the _values array in O(1), we swap the element to delete with the last one in
-      // the array, and then remove the last element (sometimes called as 'swap and pop').
-      // This modifies the order of the array, as noted in {at}.
+        if (valueIndex != 0) {// Equivalent to contains(set, value)
+            // To delete an element from the _values array in O(1), we swap the element to delete with the last one in
+            // the array, and then remove the last element (sometimes called as 'swap and pop').
+            // This modifies the order of the array, as noted in {at}.
 
-      uint256 toDeleteIndex = valueIndex - 1;
-      uint256 lastIndex = set._values.length - 1;
+            uint256 toDeleteIndex = valueIndex - 1;
+            uint256 lastIndex = set._values.length - 1;
 
-      // When the value to delete is the last one, the swap operation is unnecessary. However, since this occurs
-      // so rarely, we still do the swap anyway to avoid the gas cost of adding an 'if' statement.
+            // When the value to delete is the last one, the swap operation is unnecessary. However, since this occurs
+            // so rarely, we still do the swap anyway to avoid the gas cost of adding an 'if' statement.
 
-      bytes32 lastvalue = set._values[lastIndex];
+            bytes32 lastvalue = set._values[lastIndex];
 
-      // Move the last value to the index where the value to delete is
-      set._values[toDeleteIndex] = lastvalue;
-      // Update the index for the moved value
-      set._indexes[lastvalue] = toDeleteIndex + 1; // All indexes are 1-based
+            // Move the last value to the index where the value to delete is
+            set._values[toDeleteIndex] = lastvalue;
+            // Update the index for the moved value
+            set._indexes[lastvalue] = toDeleteIndex + 1;
+            // All indexes are 1-based
 
-      // Delete the slot where the moved value was stored
-      set._values.pop();
+            // Delete the slot where the moved value was stored
+            set._values.pop();
 
-      // Delete the index for the deleted slot
-      delete set._indexes[value];
+            // Delete the index for the deleted slot
+            delete set._indexes[value];
 
-      return true;
-    } else {
-      return false;
+            return true;
+        } else {
+            return false;
+        }
     }
-  }
 
-  /**
-   * @dev Returns true if the value is in the set. O(1).
+    /**
+     * @dev Returns true if the value is in the set. O(1).
    */
-  function _contains(Set storage set, bytes32 value) private view returns (bool) {
-    return set._indexes[value] != 0;
-  }
+    function _contains(Set storage set, bytes32 value) private view returns (bool) {
+        return set._indexes[value] != 0;
+    }
 
-  /**
-   * @dev Returns the number of values on the set. O(1).
+    /**
+     * @dev Returns the number of values on the set. O(1).
    */
-  function _length(Set storage set) private view returns (uint256) {
-    return set._values.length;
-  }
+    function _length(Set storage set) private view returns (uint256) {
+        return set._values.length;
+    }
 
-   /**
-    * @dev Returns the value stored at position `index` in the set. O(1).
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
     *
     * Note that there are no guarantees on the ordering of values inside the
     * array, and it may change when more values are added or removed.
@@ -102,68 +124,68 @@ library EnumerableSet {
     *
     * - `index` must be strictly less than {length}.
     */
-  function _at(Set storage set, uint256 index) private view returns (bytes32) {
-    require(set._values.length > index, "EnumerableSet: index out of bounds");
-    return set._values[index];
-  }
+    function _at(Set storage set, uint256 index) private view returns (bytes32) {
+        require(set._values.length > index, "EnumerableSet: index out of bounds");
+        return set._values[index];
+    }
 
-  function _getValues( Set storage set_ ) private view returns ( bytes32[] storage ) {
-    return set_._values;
-  }
+    function _getValues(Set storage set_) private view returns (bytes32[] storage) {
+        return set_._values;
+    }
 
-  // TODO needs insert function that maintains order.
-  // TODO needs NatSpec documentation comment.
-  /**
-   * Inserts new value by moving existing value at provided index to end of array and setting provided value at provided index
-   */
-  function _insert(Set storage set_, uint256 index_, bytes32 valueToInsert_ ) private returns ( bool ) {
-    require(  set_._values.length > index_ );
-    require( !_contains( set_, valueToInsert_ ), "Remove value you wish to insert if you wish to reorder array." );
-    bytes32 existingValue_ = _at( set_, index_ );
-    set_._values[index_] = valueToInsert_;
-    return _add( set_, existingValue_);
-  } 
+    // TODO needs insert function that maintains order.
+    // TODO needs NatSpec documentation comment.
+    /**
+     * Inserts new value by moving existing value at provided index to end of array and setting provided value at provided index
+     */
+    function _insert(Set storage set_, uint256 index_, bytes32 valueToInsert_) private returns (bool) {
+        require(set_._values.length > index_);
+        require(!_contains(set_, valueToInsert_), "Remove value you wish to insert if you wish to reorder array.");
+        bytes32 existingValue_ = _at(set_, index_);
+        set_._values[index_] = valueToInsert_;
+        return _add(set_, existingValue_);
+    }
 
-  struct Bytes4Set {
-    Set _inner;
-  }
+    struct Bytes4Set {
+        Set _inner;
+    }
 
-  /**
-   * @dev Add a value to a set. O(1).
+    /**
+     * @dev Add a value to a set. O(1).
    *
    * Returns true if the value was added to the set, that is if it was not
    * already present.
    */
-  function add(Bytes4Set storage set, bytes4 value) internal returns (bool) {
-    return _add(set._inner, value);
-  }
+    function add(Bytes4Set storage set, bytes4 value) internal returns (bool) {
+        return _add(set._inner, value);
+    }
 
-  /**
-   * @dev Removes a value from a set. O(1).
+    /**
+     * @dev Removes a value from a set. O(1).
    *
    * Returns true if the value was removed from the set, that is if it was
    * present.
    */
-  function remove(Bytes4Set storage set, bytes4 value) internal returns (bool) {
-    return _remove(set._inner, value);
-  }
+    function remove(Bytes4Set storage set, bytes4 value) internal returns (bool) {
+        return _remove(set._inner, value);
+    }
 
-  /**
-   * @dev Returns true if the value is in the set. O(1).
+    /**
+     * @dev Returns true if the value is in the set. O(1).
    */
-  function contains(Bytes4Set storage set, bytes4 value) internal view returns (bool) {
-    return _contains(set._inner, value);
-  }
+    function contains(Bytes4Set storage set, bytes4 value) internal view returns (bool) {
+        return _contains(set._inner, value);
+    }
 
-  /**
-   * @dev Returns the number of values on the set. O(1).
+    /**
+     * @dev Returns the number of values on the set. O(1).
    */
-  function length(Bytes4Set storage set) internal view returns (uint256) {
-    return _length(set._inner);
-  }
+    function length(Bytes4Set storage set) internal view returns (uint256) {
+        return _length(set._inner);
+    }
 
-  /**
-   * @dev Returns the value stored at position `index` in the set. O(1).
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
    *
    * Note that there are no guarantees on the ordering of values inside the
    * array, and it may change when more values are added or removed.
@@ -172,21 +194,21 @@ library EnumerableSet {
    *
    * - `index` must be strictly less than {length}.
    */
-  function at(Bytes4Set storage set, uint256 index) internal view returns ( bytes4 ) {
-    return bytes4( _at( set._inner, index ) );
-  }
-
-  function getValues( Bytes4Set storage set_ ) internal view returns ( bytes4[] memory ) {
-    bytes4[] memory bytes4Array_;
-    for( uint256 iteration_ = 0; _length( set_._inner ) > iteration_; iteration_++ ) {
-      bytes4Array_[iteration_] = bytes4( _at( set_._inner, iteration_ ) );
+    function at(Bytes4Set storage set, uint256 index) internal view returns (bytes4) {
+        return bytes4(_at(set._inner, index));
     }
-    return bytes4Array_;
-  }
 
-  function insert( Bytes4Set storage set_, uint256 index_, bytes4 valueToInsert_ ) internal returns ( bool ) {
-    return _insert( set_._inner, index_, valueToInsert_ );
-  }
+    function getValues(Bytes4Set storage set_) internal view returns (bytes4[] memory) {
+        bytes4[] memory bytes4Array_;
+        for (uint256 iteration_ = 0; _length(set_._inner) > iteration_; iteration_++) {
+            bytes4Array_[iteration_] = bytes4(_at(set_._inner, iteration_));
+        }
+        return bytes4Array_;
+    }
+
+    function insert(Bytes4Set storage set_, uint256 index_, bytes4 valueToInsert_) internal returns (bool) {
+        return _insert(set_._inner, index_, valueToInsert_);
+    }
 
     struct Bytes32Set {
         Set _inner;
@@ -236,65 +258,65 @@ library EnumerableSet {
      *
      * - `index` must be strictly less than {length}.
      */
-    function at(Bytes32Set storage set, uint256 index) internal view returns ( bytes32 ) {
+    function at(Bytes32Set storage set, uint256 index) internal view returns (bytes32) {
         return _at(set._inner, index);
     }
 
-  function getValues( Bytes32Set storage set_ ) internal view returns ( bytes4[] memory ) {
-    bytes4[] memory bytes4Array_;
+    function getValues(Bytes32Set storage set_) internal view returns (bytes4[] memory) {
+        bytes4[] memory bytes4Array_;
 
-      for( uint256 iteration_ = 0; _length( set_._inner ) >= iteration_; iteration_++ ){
-        bytes4Array_[iteration_] = bytes4( at( set_, iteration_ ) );
-      }
+        for (uint256 iteration_ = 0; _length(set_._inner) >= iteration_; iteration_++) {
+            bytes4Array_[iteration_] = bytes4(at(set_, iteration_));
+        }
 
-      return bytes4Array_;
-  }
+        return bytes4Array_;
+    }
 
-  function insert( Bytes32Set storage set_, uint256 index_, bytes32 valueToInsert_ ) internal returns ( bool ) {
-    return _insert( set_._inner, index_, valueToInsert_ );
-  }
+    function insert(Bytes32Set storage set_, uint256 index_, bytes32 valueToInsert_) internal returns (bool) {
+        return _insert(set_._inner, index_, valueToInsert_);
+    }
 
-  // AddressSet
-  struct AddressSet {
-    Set _inner;
-  }
+    // AddressSet
+    struct AddressSet {
+        Set _inner;
+    }
 
-  /**
-   * @dev Add a value to a set. O(1).
+    /**
+     * @dev Add a value to a set. O(1).
    *
    * Returns true if the value was added to the set, that is if it was not
    * already present.
    */
-  function add(AddressSet storage set, address value) internal returns (bool) {
-    return _add(set._inner, bytes32(uint256(value)));
-  }
+    function add(AddressSet storage set, address value) internal returns (bool) {
+        return _add(set._inner, bytes32(uint256(value)));
+    }
 
-  /**
-   * @dev Removes a value from a set. O(1).
+    /**
+     * @dev Removes a value from a set. O(1).
    *
    * Returns true if the value was removed from the set, that is if it was
    * present.
    */
-  function remove(AddressSet storage set, address value) internal returns (bool) {
-    return _remove(set._inner, bytes32(uint256(value)));
-  }
+    function remove(AddressSet storage set, address value) internal returns (bool) {
+        return _remove(set._inner, bytes32(uint256(value)));
+    }
 
-  /**
-   * @dev Returns true if the value is in the set. O(1).
+    /**
+     * @dev Returns true if the value is in the set. O(1).
    */
-  function contains(AddressSet storage set, address value) internal view returns (bool) {
-    return _contains(set._inner, bytes32(uint256(value)));
-  }
+    function contains(AddressSet storage set, address value) internal view returns (bool) {
+        return _contains(set._inner, bytes32(uint256(value)));
+    }
 
-  /**
-   * @dev Returns the number of values in the set. O(1).
+    /**
+     * @dev Returns the number of values in the set. O(1).
    */
-  function length(AddressSet storage set) internal view returns (uint256) {
-    return _length(set._inner);
-  }
+    function length(AddressSet storage set) internal view returns (uint256) {
+        return _length(set._inner);
+    }
 
-  /**
-   * @dev Returns the value stored at position `index` in the set. O(1).
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
    *
    * Note that there are no guarantees on the ordering of values inside the
    * array, and it may change when more values are added or removed.
@@ -303,28 +325,28 @@ library EnumerableSet {
    *
    * - `index` must be strictly less than {length}.
    */
-  function at(AddressSet storage set, uint256 index) internal view returns (address) {
-    return address(uint256(_at(set._inner, index)));
-  }
-
-  /**
-   * TODO Might require explicit conversion of bytes32[] to address[].
-   *  Might require iteration.
-   */
-  function getValues( AddressSet storage set_ ) internal view returns ( address[] memory ) {
-
-    address[] memory addressArray;
-
-    for( uint256 iteration_ = 0; _length(set_._inner) >= iteration_; iteration_++ ){
-      addressArray[iteration_] = at( set_, iteration_ );
+    function at(AddressSet storage set, uint256 index) internal view returns (address) {
+        return address(uint256(_at(set._inner, index)));
     }
 
-    return addressArray;
-  }
+    /**
+     * TODO Might require explicit conversion of bytes32[] to address[].
+     *  Might require iteration.
+     */
+    function getValues(AddressSet storage set_) internal view returns (address[] memory) {
 
-  function insert(AddressSet storage set_, uint256 index_, address valueToInsert_ ) internal returns ( bool ) {
-    return _insert( set_._inner, index_, bytes32(uint256(valueToInsert_)) );
-  }
+        address[] memory addressArray;
+
+        for (uint256 iteration_ = 0; _length(set_._inner) >= iteration_; iteration_++) {
+            addressArray[iteration_] = at(set_, iteration_);
+        }
+
+        return addressArray;
+    }
+
+    function insert(AddressSet storage set_, uint256 index_, address valueToInsert_) internal returns (bool) {
+        return _insert(set_._inner, index_, bytes32(uint256(valueToInsert_)));
+    }
 
 
     // UintSet
@@ -367,8 +389,8 @@ library EnumerableSet {
         return _length(set._inner);
     }
 
-   /**
-    * @dev Returns the value stored at position `index` in the set. O(1).
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
     *
     * Note that there are no guarantees on the ordering of values inside the
     * array, and it may change when more values are added or removed.
@@ -435,36 +457,36 @@ library EnumerableSet {
 }
 
 interface IERC20 {
-  /**
-   * @dev Returns the amount of tokens in existence.
+    /**
+     * @dev Returns the amount of tokens in existence.
    */
-  function totalSupply() external view returns (uint256);
+    function totalSupply() external view returns (uint256);
 
-  /**
-   * @dev Returns the amount of tokens owned by `account`.
+    /**
+     * @dev Returns the amount of tokens owned by `account`.
    */
-  function balanceOf(address account) external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
 
-  /**
-   * @dev Moves `amount` tokens from the caller's account to `recipient`.
+    /**
+     * @dev Moves `amount` tokens from the caller's account to `recipient`.
    *
    * Returns a boolean value indicating whether the operation succeeded.
    *
    * Emits a {Transfer} event.
    */
-  function transfer(address recipient, uint256 amount) external returns (bool);
+    function transfer(address recipient, uint256 amount) external returns (bool);
 
-  /**
-   * @dev Returns the remaining number of tokens that `spender` will be
+    /**
+     * @dev Returns the remaining number of tokens that `spender` will be
    * allowed to spend on behalf of `owner` through {transferFrom}. This is
    * zero by default.
    *
    * This value changes when {approve} or {transferFrom} are called.
    */
-  function allowance(address owner, address spender) external view returns (uint256);
+    function allowance(address owner, address spender) external view returns (uint256);
 
-  /**
-   * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
+    /**
+     * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
    *
    * Returns a boolean value indicating whether the operation succeeded.
    *
@@ -477,10 +499,10 @@ interface IERC20 {
    *
    * Emits an {Approval} event.
    */
-  function approve(address spender, uint256 amount) external returns (bool);
+    function approve(address spender, uint256 amount) external returns (bool);
 
-  /**
-   * @dev Moves `amount` tokens from `sender` to `recipient` using the
+    /**
+     * @dev Moves `amount` tokens from `sender` to `recipient` using the
    * allowance mechanism. `amount` is then deducted from the caller's
    * allowance.
    *
@@ -488,21 +510,21 @@ interface IERC20 {
    *
    * Emits a {Transfer} event.
    */
-  function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
 
-  /**
-   * @dev Emitted when `value` tokens are moved from one account (`from`) to
+    /**
+     * @dev Emitted when `value` tokens are moved from one account (`from`) to
    * another (`to`).
    *
    * Note that `value` may be zero.
    */
-  event Transfer(address indexed from, address indexed to, uint256 value);
+    event Transfer(address indexed from, address indexed to, uint256 value);
 
-  /**
-   * @dev Emitted when the allowance of a `spender` for an `owner` is set by
+    /**
+     * @dev Emitted when the allowance of a `spender` for an `owner` is set by
    * a call to {approve}. `value` is the new allowance.
    */
-  event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
 library SafeMath {
@@ -561,26 +583,26 @@ library SafeMath {
     function sqrrt(uint256 a) internal pure returns (uint c) {
         if (a > 3) {
             c = a;
-            uint b = add( div( a, 2), 1 );
+            uint b = add(div(a, 2), 1);
             while (b < c) {
                 c = b;
-                b = div( add( div( a, b ), b), 2 );
+                b = div(add(div(a, b), b), 2);
             }
         } else if (a != 0) {
             c = 1;
         }
     }
 
-    function percentageAmount( uint256 total_, uint8 percentage_ ) internal pure returns ( uint256 percentAmount_ ) {
-        return div( mul( total_, percentage_ ), 1000 );
+    function percentageAmount(uint256 total_, uint8 percentage_) internal pure returns (uint256 percentAmount_) {
+        return div(mul(total_, percentage_), 1000);
     }
 
-    function substractPercentage( uint256 total_, uint8 percentageToSub_ ) internal pure returns ( uint256 result_ ) {
-        return sub( total_, div( mul( total_, percentageToSub_ ), 1000 ) );
+    function substractPercentage(uint256 total_, uint8 percentageToSub_) internal pure returns (uint256 result_) {
+        return sub(total_, div(mul(total_, percentageToSub_), 1000));
     }
 
-    function percentageOfTotal( uint256 part_, uint256 total_ ) internal pure returns ( uint256 percent_ ) {
-        return div( mul(part_, 100) , total_ );
+    function percentageOfTotal(uint256 part_, uint256 total_) internal pure returns (uint256 percent_) {
+        return div(mul(part_, 100), total_);
     }
 
     function average(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -588,70 +610,70 @@ library SafeMath {
         return (a / 2) + (b / 2) + ((a % 2 + b % 2) / 2);
     }
 
-    function quadraticPricing( uint256 payment_, uint256 multiplier_ ) internal pure returns (uint256) {
-        return sqrrt( mul( multiplier_, payment_ ) );
+    function quadraticPricing(uint256 payment_, uint256 multiplier_) internal pure returns (uint256) {
+        return sqrrt(mul(multiplier_, payment_));
     }
 
-  function bondingCurve( uint256 supply_, uint256 multiplier_ ) internal pure returns (uint256) {
-      return mul( multiplier_, supply_ );
-  }
+    function bondingCurve(uint256 supply_, uint256 multiplier_) internal pure returns (uint256) {
+        return mul(multiplier_, supply_);
+    }
 }
 
 abstract contract ERC20 is IERC20 {
 
-  using SafeMath for uint256;
+    using SafeMath for uint256;
 
-  // TODO comment actual hash value.
-  bytes32 constant private ERC20TOKEN_ERC1820_INTERFACE_ID = keccak256( "ERC20Token" );
-    
-  // Present in ERC777
-  mapping (address => uint256) internal _balances;
+    // TODO comment actual hash value.
+    bytes32 constant private ERC20TOKEN_ERC1820_INTERFACE_ID = keccak256("ERC20Token");
 
-  // Present in ERC777
-  mapping (address => mapping (address => uint256)) internal _allowances;
+    // Present in ERC777
+    mapping(address => uint256) internal _balances;
 
-  // Present in ERC777
-  uint256 internal _totalSupply;
+    // Present in ERC777
+    mapping(address => mapping(address => uint256)) internal _allowances;
 
-  // Present in ERC777
-  string internal _name;
-    
-  // Present in ERC777
-  string internal _symbol;
-    
-  // Present in ERC777
-  uint8 internal _decimals;
+    // Present in ERC777
+    uint256 internal _totalSupply;
 
-  constructor (string memory name_, string memory symbol_, uint8 decimals_) {
-    _name = name_;
-    _symbol = symbol_;
-    _decimals = decimals_;
-  }
+    // Present in ERC777
+    string internal _name;
 
-  function name() public view returns (string memory) {
-    return _name;
-  }
+    // Present in ERC777
+    string internal _symbol;
 
-  function symbol() public view returns (string memory) {
-    return _symbol;
-  }
+    // Present in ERC777
+    uint8 internal _decimals;
 
-  function decimals() public view returns (uint8) {
-    return _decimals;
-  }
+    constructor (string memory name_, string memory symbol_, uint8 decimals_) {
+        _name = name_;
+        _symbol = symbol_;
+        _decimals = decimals_;
+    }
 
-  function totalSupply() public view override returns (uint256) {
-    return _totalSupply;
-  }
+    function name() public view returns (string memory) {
+        return _name;
+    }
 
-  function balanceOf(address account) public view virtual override returns (uint256) {
-    return _balances[account];
-  }
+    function symbol() public view returns (string memory) {
+        return _symbol;
+    }
 
-  function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
-    _transfer(msg.sender, recipient, amount);
-    return true;
-  }
+    function decimals() public view returns (uint8) {
+        return _decimals;
+    }
+
+    function totalSupply() public view override returns (uint256) {
+        return _totalSupply;
+    }
+
+    function balanceOf(address account) public view virtual override returns (uint256) {
+        return _balances[account];
+    }
+
+    function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
+        _transfer(msg.sender, recipient, amount);
+        return true;
+    }
 
     function allowance(address owner, address spender) public view virtual override returns (uint256) {
         return _allowances[owner][spender];
@@ -679,22 +701,22 @@ abstract contract ERC20 is IERC20 {
     }
 
     function _transfer(address sender, address recipient, uint256 amount) internal virtual {
-      require(sender != address(0), "ERC20: transfer from the zero address");
-      require(recipient != address(0), "ERC20: transfer to the zero address");
+        require(sender != address(0), "ERC20: transfer from the zero address");
+        require(recipient != address(0), "ERC20: transfer to the zero address");
 
-      _beforeTokenTransfer(sender, recipient, amount);
+        _beforeTokenTransfer(sender, recipient, amount);
 
-      _balances[sender] = _balances[sender].sub(amount, "ERC20: transfer amount exceeds balance");
-      _balances[recipient] = _balances[recipient].add(amount);
-      emit Transfer(sender, recipient, amount);
+        _balances[sender] = _balances[sender].sub(amount, "ERC20: transfer amount exceeds balance");
+        _balances[recipient] = _balances[recipient].add(amount);
+        emit Transfer(sender, recipient, amount);
     }
 
     function _mint(address account_, uint256 amount_) internal virtual {
         require(account_ != address(0), "ERC20: mint to the zero address");
-        _beforeTokenTransfer(address( this ), account_, amount_);
+        _beforeTokenTransfer(address(this), account_, amount_);
         _totalSupply = _totalSupply.add(amount_);
         _balances[account_] = _balances[account_].add(amount_);
-        emit Transfer(address( this ), account_, amount_);
+        emit Transfer(address(this), account_, amount_);
     }
 
     function _burn(address account, uint256 amount) internal virtual {
@@ -715,7 +737,7 @@ abstract contract ERC20 is IERC20 {
         emit Approval(owner, spender, amount);
     }
 
-  function _beforeTokenTransfer( address from_, address to_, uint256 amount_ ) internal virtual { }
+    function _beforeTokenTransfer(address from_, address to_, uint256 amount_) internal virtual {}
 }
 
 library Counters {
@@ -792,7 +814,7 @@ abstract contract ERC20Permit is ERC20, IERC2612Permit {
         require(block.timestamp <= deadline, "Permit: expired deadline");
 
         bytes32 hashStruct =
-            keccak256(abi.encode(PERMIT_TYPEHASH, owner, spender, amount, _nonces[owner].current(), deadline));
+        keccak256(abi.encode(PERMIT_TYPEHASH, owner, spender, amount, _nonces[owner].current(), deadline));
 
         bytes32 _hash = keccak256(abi.encodePacked(uint16(0x1901), DOMAIN_SEPARATOR, hashStruct));
 
@@ -809,63 +831,65 @@ abstract contract ERC20Permit is ERC20, IERC2612Permit {
 }
 
 interface IOwnable {
-  function owner() external view returns (address);
+    function owner() external view returns (address);
 
-  function renounceOwnership() external;
-  
-  function transferOwnership( address newOwner_ ) external;
+    function renounceOwnership() external;
+
+    function transferOwnership(address newOwner_) external;
 }
 
 contract Ownable is IOwnable {
-    
-  address internal _owner;
 
-  event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    address internal _owner;
 
-  constructor () {
-    _owner = msg.sender;
-    emit OwnershipTransferred( address(0), _owner );
-  }
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
-  function owner() public view override returns (address) {
-    return _owner;
-  }
+    constructor () {
+        _owner = msg.sender;
+        emit OwnershipTransferred(address(0), _owner);
+    }
 
-  modifier onlyOwner() {
-    require( _owner == msg.sender, "Ownable: caller is not the owner" );
-    _;
-  }
+    function owner() public view override returns (address) {
+        return _owner;
+    }
 
-  function renounceOwnership() public virtual override onlyOwner() {
-    emit OwnershipTransferred( _owner, address(0) );
-    _owner = address(0);
-  }
+    modifier onlyOwner() {
+        require(_owner == msg.sender, "Ownable: caller is not the owner");
+        _;
+    }
 
-  function transferOwnership( address newOwner_ ) public virtual override onlyOwner() {
-    require( newOwner_ != address(0), "Ownable: new owner is the zero address");
-    emit OwnershipTransferred( _owner, newOwner_ );
-    _owner = newOwner_;
-  }
+    function renounceOwnership() public virtual override onlyOwner() {
+        emit OwnershipTransferred(_owner, address(0));
+        _owner = address(0);
+    }
+
+    function transferOwnership(address newOwner_) public virtual override onlyOwner() {
+        require(newOwner_ != address(0), "Ownable: new owner is the zero address");
+        emit OwnershipTransferred(_owner, newOwner_);
+        _owner = newOwner_;
+    }
 }
 
 contract VaultOwned is Ownable {
-    
-  address internal _vault;
 
-  function setVault( address vault_ ) external onlyOwner() returns ( bool ) {
-    _vault = vault_;
+    address internal _vault;
+    constructor() {
+        _vault = msg.sender;
+    }
+    function setVault(address vault_) external onlyOwner() returns (bool) {
+        _vault = vault_;
 
-    return true;
-  }
+        return true;
+    }
 
-  function vault() public view returns (address) {
-    return _vault;
-  }
+    function vault() public view returns (address) {
+        return _vault;
+    }
 
-  modifier onlyVault() {
-    require( _vault == msg.sender, "VaultOwned: caller is not the Vault" );
-    _;
-  }
+    modifier onlyVault() {
+        require(_vault == msg.sender, "VaultOwned: caller is not the Vault");
+        _;
+    }
 
 }
 
@@ -873,7 +897,7 @@ contract OlympusERC20Token is ERC20Permit, VaultOwned {
 
     using SafeMath for uint256;
 
-    constructor() ERC20("Olympus", "OHM", 9) {
+    constructor() ERC20("TempoDAO", "TEMPO", 9) {
     }
 
     function mint(address account_, uint256 amount_) external onlyVault() {
@@ -883,17 +907,17 @@ contract OlympusERC20Token is ERC20Permit, VaultOwned {
     function burn(uint256 amount) public virtual {
         _burn(msg.sender, amount);
     }
-     
+
     function burnFrom(address account_, uint256 amount_) public virtual {
         _burnFrom(account_, amount_);
     }
 
     function _burnFrom(address account_, uint256 amount_) public virtual {
         uint256 decreasedAllowance_ =
-            allowance(account_, msg.sender).sub(
-                amount_,
-                "ERC20: burn amount exceeds allowance"
-            );
+        allowance(account_, msg.sender).sub(
+            amount_,
+            "ERC20: burn amount exceeds allowance"
+        );
 
         _approve(account_, msg.sender, decreasedAllowance_);
         _burn(account_, amount_);

@@ -1,4 +1,6 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// SPDX-License-Identifier: MIT
+
+
 pragma solidity 0.7.5;
 
 interface IOwnable {
@@ -938,13 +940,13 @@ contract MockOlympusBondDepository is Ownable {
     address _DAO,
     address _bondCalculator
   ) {
-    require(_OHM != address(0));
+    require(_OHM != address(0),"INVALID TOKEN ADDRESS");
     OHM = _OHM;
-    require(_principle != address(0));
+    require(_principle != address(0),"INVALID PRINCIPLE ADDRESS");
     principle = _principle;
-    require(_treasury != address(0));
+    require(_treasury != address(0),"INVALID TREASURE ADDRESS");
     treasury = _treasury;
-    require(_DAO != address(0));
+    require(_DAO != address(0),"INVALID DAO ADDRESS");
     DAO = _DAO;
     // bondCalculator should be address(0) if not LP bond
     bondCalculator = _bondCalculator;
