@@ -68,7 +68,7 @@ module.exports = async function (deployer, network, accounts) {
   } else if (network == 'ftm') {
     MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
   }
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
   const sOlympus = await _sOlympus.deployed();
   const OlympusStaking = await _OlympusStaking.deployed();
   const StakingHelper = await _StakingHelper.deployed();

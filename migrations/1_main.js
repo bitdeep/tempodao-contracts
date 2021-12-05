@@ -44,8 +44,8 @@ module.exports = async function (deployer, network, accounts) {
   yellow('MIM:  end');
 
   green('OlympusERC20Token: start');
-  await deployer.deploy(_OlympusERC20Token);
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  // await deployer.deploy(_OlympusERC20Token);
+  const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
   yellow('OlympusERC20Token: end');
 
   green('sOlympus: start');

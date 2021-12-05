@@ -73,7 +73,7 @@ module.exports = async function (deployer, network, accounts) {
   } else {
     MIM_Contract = await _MIM.at(MIM);
   }
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
   const sOlympus = await _sOlympus.deployed();
   const OlympusStaking = await _OlympusStaking.deployed();
 
