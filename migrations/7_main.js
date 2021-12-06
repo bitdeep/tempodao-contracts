@@ -88,6 +88,9 @@ module.exports = async function (deployer, network, accounts) {
   green('OlympusTreasury Distributor');
   await OlympusStaking.setContract('1', StakingWarmup.address);
   await OlympusStaking.setContract('0', Distributor.address);
+  await OlympusStaking.setContract('0', Distributor.address);
+  const initialRewardRate = '3000';
+  await Distributor.addRecipient(OlympusStaking.address, initialRewardRate);
 
   green('OlympusTreasury OlympusStaking 1');
   yellow('\tsOlympus='+sOlympus.address);
