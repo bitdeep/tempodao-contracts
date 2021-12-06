@@ -90,7 +90,7 @@ module.exports = async function (deployer, network, accounts) {
   const controlVariable = '5',
         vestingTerm = '432000',
         minimumPrice = '4000',
-        maxPayout = '1000',
+        maxPayout = '300',
         fee = '10000',
         maxDebt = '1000000000000000000000000', initialDebt = '0';
   const OlympusBondDepository = await _OlympusBondDepository.deployed();
