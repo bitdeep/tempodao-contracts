@@ -59,53 +59,51 @@ module.exports = async function (deployer, network, accounts) {
   const ZERO = '0x0000000000000000000000000000000000000000';
   const largeApproval = '100000000000000000000000000000000';
   const initialMint = '10000000000000000000000000';
+    green('MIM: start');
+    let MIM_Contract;
+    let MIM = '0x130966628846bfd36ff31a822705796e8cb8c18d'; // movr
+    if (network == 'dev') {
+      MIM_Contract = await _MIM.deployed();
+      MIM = MIM_Contract.address;
+    } else if (network == 'ftm') {
+      MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
+    }
+    const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
+    const sOlympus = await _sOlympus.deployed();
+    const OlympusStaking = await _OlympusStaking.deployed();
+    const StakingHelper = await _StakingHelper.deployed();
+    const OlympusTreasury = await _OlympusTreasury.deployed();
+    const StakingWarmup = await _StakingWarmup.deployed();
 
-  green('MIM: start');
-  let MIM_Contract;
-  let MIM = '0x130966628846bfd36ff31a822705796e8cb8c18d'; // movr
-  if (network == 'dev') {
-    MIM_Contract = await _MIM.deployed();
-    MIM = MIM_Contract.address;
-  } else if (network == 'ftm') {
-    MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
-  }
-  const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
-  const sOlympus = await _sOlympus.deployed();
-  const OlympusStaking = await _OlympusStaking.deployed();
-  const StakingHelper = await _StakingHelper.deployed();
-  const OlympusTreasury = await _OlympusTreasury.deployed();
-  const StakingWarmup = await _StakingWarmup.deployed();
+    const OlympusDAO = await _OlympusDAO.deployed();
+    const OlympusBondingCalculator = await _OlympusBondingCalculator.deployed();
+    const Distributor = await _Distributor.deployed();
 
-  const OlympusDAO = await _OlympusDAO.deployed();
-  const OlympusBondingCalculator = await _OlympusBondingCalculator.deployed();
-  const Distributor = await _Distributor.deployed();
+    const OHMCirculatingSupplyContract = await _OHMCirculatingSupplyContract.deployed();
+    const OlympusBondDepository = await _OlympusBondDepository.deployed();
 
-  const OHMCirculatingSupplyContract = await _OHMCirculatingSupplyContract.deployed();
-  const OlympusBondDepository = await _OlympusBondDepository.deployed();
+    const RedeemHelper = await _RedeemHelper.deployed();
+  /*
 
-  const RedeemHelper = await _RedeemHelper.deployed();
+    green('OlympusTreasury Distributor');
+    await OlympusStaking.setContract('1', StakingWarmup.address);
+    await OlympusStaking.setContract('0', Distributor.address);
+    const initialRewardRate = '300';
+    await Distributor.addRecipient(OlympusStaking.address, initialRewardRate);
 
-  green('OlympusTreasury Distributor');
-  await OlympusStaking.setContract('1', StakingWarmup.address);
-  await OlympusStaking.setContract('0', Distributor.address);
-  await OlympusStaking.setContract('0', Distributor.address);
-  const initialRewardRate = '3000';
-  await Distributor.addRecipient(OlympusStaking.address, initialRewardRate);
+    green('OlympusTreasury OlympusStaking 1');
+    yellow('\tsOlympus='+sOlympus.address);
+    yellow('\tOlympusStaking='+OlympusStaking.address);
+    await sOlympus.initialize(OlympusStaking.address);
+    green('OlympusTreasury OlympusStaking 2');
+    await sOlympus.setIndex('1000000000');
+    green('OlympusTreasury OlympusStaking 3');
+    await OlympusERC20Token.setVault(accounts[0]);
+    await OlympusERC20Token.mint(accounts[0], '100000000000000');
+    await OlympusERC20Token.setVault(OlympusTreasury.address);
 
-  green('OlympusTreasury OlympusStaking 1');
-  yellow('\tsOlympus='+sOlympus.address);
-  yellow('\tOlympusStaking='+OlympusStaking.address);
-  await sOlympus.initialize(OlympusStaking.address);
-  green('OlympusTreasury OlympusStaking 2');
-  await sOlympus.setIndex('1000000000');
-  green('OlympusTreasury OlympusStaking 3');
-  await OlympusERC20Token.setVault(accounts[0]);
-  await OlympusERC20Token.mint(accounts[0], '10000000000000');
-  await OlympusERC20Token.setVault(OlympusTreasury.address);
-
-
+  */
   magenta("CONTRACTS")
-  green("- MIM: " + MIM);
   green("- OlympusERC20Token: " + OlympusERC20Token.address);
   green("- sOlympus: " + sOlympus.address);
   green("- OlympusStaking: " + OlympusStaking.address);

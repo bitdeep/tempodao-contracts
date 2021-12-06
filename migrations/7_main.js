@@ -85,11 +85,11 @@ module.exports = async function (deployer, network, accounts) {
 
   const RedeemHelper = await _RedeemHelper.deployed();
 
-  green('OlympusTreasury Distributor');
-  await OlympusStaking.setContract('1', StakingWarmup.address);
-  await OlympusStaking.setContract('0', Distributor.address);
-  await OlympusStaking.setContract('0', Distributor.address);
-
+  // green('OlympusTreasury Distributor');
+  // await OlympusStaking.setContract('1', StakingWarmup.address);
+  // await OlympusStaking.setContract('0', Distributor.address);
+  // await OlympusStaking.setContract('0', Distributor.address);
+/*
   green('OlympusTreasury OlympusStaking 1');
   yellow('\tsOlympus='+sOlympus.address);
   yellow('\tOlympusStaking='+OlympusStaking.address);
@@ -100,7 +100,7 @@ module.exports = async function (deployer, network, accounts) {
   await OlympusERC20Token.setVault(accounts[0]);
   await OlympusERC20Token.mint(accounts[0], '10000000000000');
   await OlympusERC20Token.setVault(OlympusTreasury.address);
-
+*/
 
   magenta("CONTRACTS")
   green("- MIM: " + MIM);

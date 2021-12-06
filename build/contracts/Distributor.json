@@ -43355,92 +43355,14 @@
   },
   "networks": {
     "1": {
-      "events": {
-        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "previousOwner",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "newOwner",
-              "type": "address"
-            }
-          ],
-          "name": "OwnershipTransferred",
-          "type": "event"
-        }
-      },
-      "links": {},
-      "address": "0xe7eF93E204D0F709D54299eecEcD9918F69724CC",
-      "transactionHash": "0xf2ac2cf328111647b8aa57965952690bb7c334df7347d317bd79a8dae08e6096"
-    },
-    "250": {
-      "events": {
-        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "previousOwner",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "newOwner",
-              "type": "address"
-            }
-          ],
-          "name": "OwnershipTransferred",
-          "type": "event"
-        }
-      },
-      "links": {},
-      "address": "0x54Aea74f0a0959bB19513A2B2BDF0de967b53bc5",
-      "transactionHash": "0x0bcfc941fc5963ea86c8a42f13c4e1aaeeedb2d35240e27a7ff47892dadbdc9f"
-    },
-    "1281": {
       "events": {},
       "links": {},
-      "address": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
-      "transactionHash": "0xf69405c8dfbf650ae7ac2e1c262e18e6aa5a51fdb31eff5d167ca42faf52e85e"
-    },
-    "5777": {
-      "events": {
-        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "previousOwner",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "newOwner",
-              "type": "address"
-            }
-          ],
-          "name": "OwnershipTransferred",
-          "type": "event"
-        }
-      },
-      "links": {},
-      "address": "0x47BbDD872058A9CA1FF06B7Cb2Ad8639900f1604",
-      "transactionHash": "0xab923175304a5f5c0f43b6d85098c0a3305ecbc6cb2930bdb3d48e4f6fafd6b1"
+      "address": "0x37FCC0D7479106f683427F0474De9961a55C6906",
+      "transactionHash": "0xd887a6d06ad48c6097fe2fbcb9713e9438da879d423596d08d1888867f392f8c"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-12-06T17:44:30.534Z",
+  "updatedAt": "2021-12-06T22:35:24.487Z",
   "devdoc": {
     "kind": "dev",
     "methods": {
