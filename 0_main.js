@@ -51,7 +51,7 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '28800';
+  const epochLength = '150';
   const firstEpochNumber = '0';
   const firstEpochBlock = '899594';
   const nextEpochBlock = '899595';

@@ -1,5 +1,4 @@
-// truffle migrate --f 7 --to 7 --network avax
-// truffle run verify  --network avax
+// truffle migrate --f 6 --to 6 --network avax
 const _OlympusERC20Token = artifacts.require("OlympusERC20Token");
 const _sOlympus = artifacts.require("sOlympus");
 const _OlympusStaking = artifacts.require("OlympusStaking");
@@ -52,7 +51,7 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '28800';
+  const epochLength = '150';
   const firstEpochNumber = '7808438';
   const firstEpochBlock = '7808443';
   const nextEpochBlock = '7808443';
@@ -69,7 +68,7 @@ module.exports = async function (deployer, network, accounts) {
   } else if (network == 'ftm') {
     MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
   }
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
   const sOlympus = await _sOlympus.deployed();
   const OlympusStaking = await _OlympusStaking.deployed();
   const StakingHelper = await _StakingHelper.deployed();
@@ -85,21 +84,20 @@ module.exports = async function (deployer, network, accounts) {
 
   const RedeemHelper = await _RedeemHelper.deployed();
 
+  green('OlympusTreasury OlympusBondingCalculator');
+  await OlympusTreasury.queue('4', OlympusBondingCalculator.address)
+  await OlympusTreasury.toggle('4', OlympusBondingCalculator.address, ZERO)
+  await OlympusTreasury.queue('8', OlympusBondingCalculator.address)
+  await OlympusTreasury.toggle('8', OlympusBondingCalculator.address, ZERO)
+
   green('OlympusTreasury Distributor');
-  await OlympusStaking.setContract('1', StakingWarmup.address);
-  await OlympusStaking.setContract('0', Distributor.address);
+  await OlympusTreasury.queue('8', Distributor.address)
+  await OlympusTreasury.toggle('8', Distributor.address, ZERO)
 
-  green('OlympusTreasury OlympusStaking 1');
-  yellow('\tsOlympus='+sOlympus.address);
-  yellow('\tOlympusStaking='+OlympusStaking.address);
-  await sOlympus.initialize(OlympusStaking.address);
-  green('OlympusTreasury OlympusStaking 2');
-  await sOlympus.setIndex('1000000000');
-  green('OlympusTreasury OlympusStaking 3');
-  await OlympusERC20Token.setVault(accounts[0]);
-  await OlympusERC20Token.mint(accounts[0], '10000000000000');
-  await OlympusERC20Token.setVault(OlympusTreasury.address);
 
+  green('OlympusTreasury sOHM');
+  await OlympusTreasury.queue('9', sOlympus.address)
+  await OlympusTreasury.toggle('9', sOlympus.address, ZERO)
 
   magenta("CONTRACTS")
   green("- MIM: " + MIM);

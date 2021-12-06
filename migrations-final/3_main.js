@@ -1,4 +1,5 @@
-// truffle migrate --f 5 --to 5 --network avax && truffle run verify RedeemHelper --network avax
+// truffle migrate --f 3 --to 3 --network avax
+// truffle run verify OlympusDAO OlympusBondingCalculator Distributor --network avax
 const _OlympusERC20Token = artifacts.require("OlympusERC20Token");
 const _sOlympus = artifacts.require("sOlympus");
 const _OlympusStaking = artifacts.require("OlympusStaking");
@@ -51,7 +52,7 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '28800';
+  const epochLength = '150';
   const firstEpochNumber = '7808438';
   const firstEpochBlock = '7808443';
   const nextEpochBlock = '7808443';
@@ -68,34 +69,20 @@ module.exports = async function (deployer, network, accounts) {
   } else if (network == 'ftm') {
     MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
   }
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
   const sOlympus = await _sOlympus.deployed();
   const OlympusStaking = await _OlympusStaking.deployed();
   const StakingHelper = await _StakingHelper.deployed();
   const OlympusTreasury = await _OlympusTreasury.deployed();
   const StakingWarmup = await _StakingWarmup.deployed();
 
+  await deployer.deploy(_OlympusDAO);
   const OlympusDAO = await _OlympusDAO.deployed();
+  await deployer.deploy(_OlympusBondingCalculator, OlympusERC20Token.address);
   const OlympusBondingCalculator = await _OlympusBondingCalculator.deployed();
+  await deployer.deploy(_Distributor, OlympusTreasury.address, OlympusERC20Token.address, epochLength, nextEpochBlock);
   const Distributor = await _Distributor.deployed();
 
-  const OHMCirculatingSupplyContract = await _OHMCirculatingSupplyContract.deployed();
-  const OlympusBondDepository = await _OlympusBondDepository.deployed();
-
-  await deployer.deploy(_RedeemHelper);
-  const RedeemHelper = await _RedeemHelper.deployed();
-  await RedeemHelper.addBondContract(OlympusBondDepository.address);
-
-  await OlympusTreasury.queue('0', accounts[0])
-  await OlympusTreasury.toggle('0', accounts[0], ZERO)
-
-  await OlympusTreasury.queue('4', accounts[0])
-  await OlympusTreasury.toggle('4', accounts[0], ZERO)
-
-  await OlympusTreasury.queue('0', OlympusBondDepository.address)
-  await OlympusTreasury.toggle('0', OlympusBondDepository.address, ZERO)
-  await OlympusTreasury.queue('4', OlympusBondDepository.address)
-  await OlympusTreasury.toggle('4', OlympusBondDepository.address, ZERO)
 
   magenta("CONTRACTS")
   green("- MIM: " + MIM);
@@ -108,9 +95,6 @@ module.exports = async function (deployer, network, accounts) {
   green("- OlympusDAO: " + OlympusDAO.address);
   green("- OlympusBondingCalculator: " + OlympusBondingCalculator.address);
   green("- Distributor: " + Distributor.address);
-  green("- OHMCirculatingSupplyContract: " + OHMCirculatingSupplyContract.address);
-  green("- OlympusBondDepository: " + OlympusBondDepository.address);
-  green("- RedeemHelper: " + RedeemHelper.address);
 
 };
 

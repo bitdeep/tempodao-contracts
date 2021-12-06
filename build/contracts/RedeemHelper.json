@@ -56,7 +56,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -69,7 +70,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -6992,10 +6994,49 @@
   },
   "networks": {
     "1": {
-      "events": {},
+      "events": {
+        "0xaa151555690c956fc3ea32f106bb9f119b5237a061eaa8557cff3e51e3792c8d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipPulled",
+          "type": "event"
+        },
+        "0xea8258f2d9ddb679928cf34b78cf645b7feda9acc828e4dd82d014eaae270eba": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipPushed",
+          "type": "event"
+        }
+      },
       "links": {},
-      "address": "0x22DcC3EC9BAbE0e7c36B7b3Ee223Bd31687427A7",
-      "transactionHash": "0x05daa8d4e37226c17496bbd21ddb5092f52018d54f56d94716c9de88147e6939"
+      "address": "0x2029f41f61BcD9067d480474a497A7d93dff474e",
+      "transactionHash": "0xd7e238d27ef879d9180f0ad5e03e10c8d05f3ad76feb35cf2fd23498dd31dee7"
     },
     "250": {
       "events": {
@@ -7095,7 +7136,8 @@
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-12-05T20:05:35.957Z",
+  "updatedAt": "2021-12-06T15:53:43.706Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

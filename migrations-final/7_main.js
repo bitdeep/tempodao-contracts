@@ -1,6 +1,5 @@
-// truffle migrate --f 2 --to 2 --network avax
-// truffle run verify StakingHelper OlympusTreasury StakingWarmup --network avax
-// if StakingWarmup fail to verify, do it manually
+// truffle migrate --f 7 --to 7 --network avax
+// truffle run verify  --network avax
 const _OlympusERC20Token = artifacts.require("OlympusERC20Token");
 const _sOlympus = artifacts.require("sOlympus");
 const _OlympusStaking = artifacts.require("OlympusStaking");
@@ -53,7 +52,7 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '28800';
+  const epochLength = '150';
   const firstEpochNumber = '7808438';
   const firstEpochBlock = '7808443';
   const nextEpochBlock = '7808443';
@@ -61,7 +60,7 @@ module.exports = async function (deployer, network, accounts) {
   const largeApproval = '100000000000000000000000000000000';
   const initialMint = '10000000000000000000000000';
 
-  green('MIM:  start');
+  green('MIM: start');
   let MIM_Contract;
   let MIM = '0x130966628846bfd36ff31a822705796e8cb8c18d'; // movr
   if (network == 'dev') {
@@ -69,33 +68,41 @@ module.exports = async function (deployer, network, accounts) {
     MIM = MIM_Contract.address;
   } else if (network == 'ftm') {
     MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
-    MIM_Contract = await _MIM.at(MIM);
-  } else {
-    MIM_Contract = await _MIM.at(MIM);
   }
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
   const sOlympus = await _sOlympus.deployed();
   const OlympusStaking = await _OlympusStaking.deployed();
-
-  green('StakingHelper: start');
-  await deployer.deploy(_StakingHelper,
-    OlympusStaking.address,
-    OlympusERC20Token.address);
   const StakingHelper = await _StakingHelper.deployed();
-  yellow('StakingHelper: end');
-
-  green('OlympusTreasury: start');
-  const blocksNeededForQueue = 0; // timelock
-  await deployer.deploy(_OlympusTreasury,
-    OlympusERC20Token.address,
-    MIM, blocksNeededForQueue);
   const OlympusTreasury = await _OlympusTreasury.deployed();
-  yellow('OlympusTreasury: end');
-
-  green('StakingWarmup: start');
-  await deployer.deploy(_StakingWarmup, OlympusStaking.address, sOlympus.address);
   const StakingWarmup = await _StakingWarmup.deployed();
-  yellow('StakingWarmup: end');
+
+  const OlympusDAO = await _OlympusDAO.deployed();
+  const OlympusBondingCalculator = await _OlympusBondingCalculator.deployed();
+  const Distributor = await _Distributor.deployed();
+
+  const OHMCirculatingSupplyContract = await _OHMCirculatingSupplyContract.deployed();
+  const OlympusBondDepository = await _OlympusBondDepository.deployed();
+
+  const RedeemHelper = await _RedeemHelper.deployed();
+
+  green('OlympusTreasury Distributor');
+  await OlympusStaking.setContract('1', StakingWarmup.address);
+  await OlympusStaking.setContract('0', Distributor.address);
+  await OlympusStaking.setContract('0', Distributor.address);
+  const initialRewardRate = '3000';
+  await Distributor.addRecipient(OlympusStaking.address, initialRewardRate);
+
+  green('OlympusTreasury OlympusStaking 1');
+  yellow('\tsOlympus='+sOlympus.address);
+  yellow('\tOlympusStaking='+OlympusStaking.address);
+  await sOlympus.initialize(OlympusStaking.address);
+  green('OlympusTreasury OlympusStaking 2');
+  await sOlympus.setIndex('1000000000');
+  green('OlympusTreasury OlympusStaking 3');
+  await OlympusERC20Token.setVault(accounts[0]);
+  await OlympusERC20Token.mint(accounts[0], '10000000000000');
+  await OlympusERC20Token.setVault(OlympusTreasury.address);
+
 
   magenta("CONTRACTS")
   green("- MIM: " + MIM);
@@ -105,6 +112,12 @@ module.exports = async function (deployer, network, accounts) {
   green("- StakingHelper: " + StakingHelper.address);
   green("- OlympusTreasury: " + OlympusTreasury.address);
   green("- StakingWarmup: " + StakingWarmup.address);
+  green("- OlympusDAO: " + OlympusDAO.address);
+  green("- OlympusBondingCalculator: " + OlympusBondingCalculator.address);
+  green("- Distributor: " + Distributor.address);
+  green("- OHMCirculatingSupplyContract: " + OHMCirculatingSupplyContract.address);
+  green("- OlympusBondDepository: " + OlympusBondDepository.address);
+  green("- RedeemHelper: " + RedeemHelper.address);
 
 };
 

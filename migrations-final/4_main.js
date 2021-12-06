@@ -1,5 +1,5 @@
-// truffle migrate --f 3 --to 3 --network avax
-// truffle run verify OlympusDAO OlympusBondingCalculator Distributor --network avax
+// truffle migrate --f 4 --to 4 --network avax
+// truffle run verify OlympusBondDepository OHMCirculatingSupplyContract --network avax
 const _OlympusERC20Token = artifacts.require("OlympusERC20Token");
 const _sOlympus = artifacts.require("sOlympus");
 const _OlympusStaking = artifacts.require("OlympusStaking");
@@ -52,7 +52,7 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '28800';
+  const epochLength = '150';
   const firstEpochNumber = '7808438';
   const firstEpochBlock = '7808443';
   const nextEpochBlock = '7808443';
@@ -69,20 +69,35 @@ module.exports = async function (deployer, network, accounts) {
   } else if (network == 'ftm') {
     MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
   }
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
   const sOlympus = await _sOlympus.deployed();
   const OlympusStaking = await _OlympusStaking.deployed();
   const StakingHelper = await _StakingHelper.deployed();
   const OlympusTreasury = await _OlympusTreasury.deployed();
   const StakingWarmup = await _StakingWarmup.deployed();
 
-  await deployer.deploy(_OlympusDAO);
   const OlympusDAO = await _OlympusDAO.deployed();
-  await deployer.deploy(_OlympusBondingCalculator, OlympusERC20Token.address);
   const OlympusBondingCalculator = await _OlympusBondingCalculator.deployed();
-  await deployer.deploy(_Distributor, OlympusTreasury.address, OlympusERC20Token.address, epochLength, nextEpochBlock);
   const Distributor = await _Distributor.deployed();
 
+  await deployer.deploy(_OHMCirculatingSupplyContract, accounts[0]);
+  const OHMCirculatingSupplyContract = await _OHMCirculatingSupplyContract.deployed();
+  await OHMCirculatingSupplyContract.initialize(OlympusERC20Token.address);
+  await OHMCirculatingSupplyContract.setNonCirculatingOHMAddresses([OlympusDAO.address]);
+  await Distributor.distribute();
+
+  await deployer.deploy(_OlympusBondDepository, OlympusERC20Token.address, MIM, OlympusTreasury.address, OlympusDAO.address, ZERO);
+  const controlVariable = '5',
+        vestingTerm = '432000',
+        minimumPrice = '4000',
+        maxPayout = '1000',
+        fee = '10000',
+        maxDebt = '1000000000000000000000000', initialDebt = '0';
+  const OlympusBondDepository = await _OlympusBondDepository.deployed();
+  await OlympusBondDepository.initializeBondTerms(controlVariable,
+    vestingTerm, minimumPrice, maxPayout, fee, maxDebt, initialDebt);
+  await OlympusBondDepository.setBondTerms('1', '1000');
+  await OlympusBondDepository.setStaking(StakingHelper.address, true);
 
   magenta("CONTRACTS")
   green("- MIM: " + MIM);
@@ -95,6 +110,8 @@ module.exports = async function (deployer, network, accounts) {
   green("- OlympusDAO: " + OlympusDAO.address);
   green("- OlympusBondingCalculator: " + OlympusBondingCalculator.address);
   green("- Distributor: " + Distributor.address);
+  green("- OHMCirculatingSupplyContract: " + OHMCirculatingSupplyContract.address);
+  green("- OlympusBondDepository: " + OlympusBondDepository.address);
 
 };
 

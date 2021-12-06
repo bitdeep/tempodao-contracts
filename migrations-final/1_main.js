@@ -18,7 +18,7 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '28800';
+  const epochLength = '150';
   const firstEpochNumber = '7808438';
   const firstEpochBlock = '7808443';
   const nextEpochBlock = '7808443';
@@ -44,8 +44,8 @@ module.exports = async function (deployer, network, accounts) {
   yellow('MIM:  end');
 
   green('OlympusERC20Token: start');
-  await deployer.deploy(_OlympusERC20Token);
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  // await deployer.deploy(_OlympusERC20Token);
+  const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
   yellow('OlympusERC20Token: end');
 
   green('sOlympus: start');

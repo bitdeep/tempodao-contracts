@@ -51,7 +51,7 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '28800';
+  const epochLength = '150';
   const firstEpochNumber = '7808438';
   const firstEpochBlock = '7808443';
   const nextEpochBlock = '7808443';
@@ -68,7 +68,7 @@ module.exports = async function (deployer, network, accounts) {
   } else if (network == 'ftm') {
     MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
   }
-  const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
+  const OlympusERC20Token = await _OlympusERC20Token.deployed();
   const sOlympus = await _sOlympus.deployed();
   const OlympusStaking = await _OlympusStaking.deployed();
   const StakingHelper = await _StakingHelper.deployed();
@@ -91,6 +91,7 @@ module.exports = async function (deployer, network, accounts) {
   await OlympusTreasury.toggle('8', OlympusBondingCalculator.address, ZERO)
 
   green('OlympusTreasury Distributor');
+  await Distributor.addRecipient(OlympusStaking.address, '5000')
   await OlympusTreasury.queue('8', Distributor.address)
   await OlympusTreasury.toggle('8', Distributor.address, ZERO)
 
