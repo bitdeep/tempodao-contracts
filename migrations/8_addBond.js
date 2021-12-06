@@ -1,5 +1,5 @@
 // truffle migrate --f 8 --to 8 --network avax
-// truffle run verify OlympusBondDepository@0x4eAF4A5302D15212bEf36D77e60be6766FbFDEf7 --network avax
+// truffle run verify OlympusBondDepository --network avax
 const _OlympusERC20Token = artifacts.require("OlympusERC20Token");
 const _StakingHelper = artifacts.require("StakingHelper");
 const _OlympusTreasury = artifacts.require("OlympusTreasury");
