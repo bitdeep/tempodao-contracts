@@ -98,8 +98,8 @@ module.exports = async function (deployer, network, accounts) {
   if( process.env.DEPLOY_MINT_TOKENS ) {
     await OlympusERC20Token.setVault(accounts[0]);
     await OlympusERC20Token.mint(accounts[0], process.env.DEPLOY_MINT_TOKENS);
+    await OlympusERC20Token.setVault(OlympusTreasury.address);
   }
-  await OlympusERC20Token.setVault(OlympusTreasury.address);
 
 
   magenta("CONTRACTS")
