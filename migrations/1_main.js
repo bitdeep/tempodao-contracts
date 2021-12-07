@@ -1,3 +1,4 @@
+require('dotenv').config();
 // truffle migrate --f 1 --to 1 --network avax
 // truffle run verify OlympusERC20Token sOlympus OlympusStaking --network avax
 const _OlympusERC20Token = artifacts.require("OlympusERC20Token");
@@ -18,17 +19,13 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '150';
-  const firstEpochNumber = '7808438';
-  const firstEpochBlock = '7808443';
-  const nextEpochBlock = '7808443';
-  const ZERO = '0x0000000000000000000000000000000000000000';
-  const largeApproval = '100000000000000000000000000000000';
-  const initialMint = '10000000000000000000000000';
+  const epochLength = process.env.DEPLOY_EPOCH;
+  const firstEpochNumber = process.env.DEPLOY_FIRST_EPOCH_FIRST;
+  const firstEpochBlock = process.env.DEPLOY_FIRST_EPOCH_BLOCK;
 
   green('MIM:  start');
   let MIM_Contract;
-  let MIM = '0x130966628846bfd36ff31a822705796e8cb8c18d'; // movr
+  let MIM = process.env.BOND; // movr
   if (network == 'dev') {
     await deployer.deploy(_MIM, '1337');
     MIM_Contract = await _MIM.deployed();
@@ -44,8 +41,13 @@ module.exports = async function (deployer, network, accounts) {
   yellow('MIM:  end');
 
   green('OlympusERC20Token: start');
-  await deployer.deploy(_OlympusERC20Token);
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  let OlympusERC20Token;
+  if( ! process.env.DEPLOY_USE_TOKEN ){
+    await deployer.deploy(_OlympusERC20Token);
+    OlympusERC20Token = await _OlympusERC20Token.deployed();
+  }else{
+    OlympusERC20Token = await _OlympusERC20Token.at(process.env.DEPLOY_USE_TOKEN);
+  }
   yellow('OlympusERC20Token: end');
 
   green('sOlympus: start');

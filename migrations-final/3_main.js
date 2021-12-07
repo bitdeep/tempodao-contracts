@@ -53,12 +53,7 @@ module.exports = async function (deployer, network, accounts) {
   green('main account: '+accounts);
 
   const epochLength = '150';
-  const firstEpochNumber = '7808438';
-  const firstEpochBlock = '7808443';
   const nextEpochBlock = '7808443';
-  const ZERO = '0x0000000000000000000000000000000000000000';
-  const largeApproval = '100000000000000000000000000000000';
-  const initialMint = '10000000000000000000000000';
 
   green('MIM:  start');
   let MIM_Contract;

@@ -1,3 +1,4 @@
+require('dotenv').config();
 // truffle migrate --f 2 --to 2 --network avax
 // truffle run verify StakingHelper OlympusTreasury StakingWarmup --network avax
 // if StakingWarmup fail to verify, do it manually
@@ -53,17 +54,9 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '150';
-  const firstEpochNumber = '7808438';
-  const firstEpochBlock = '7808443';
-  const nextEpochBlock = '7808443';
-  const ZERO = '0x0000000000000000000000000000000000000000';
-  const largeApproval = '100000000000000000000000000000000';
-  const initialMint = '10000000000000000000000000';
-
   green('MIM:  start');
   let MIM_Contract;
-  let MIM = '0x130966628846bfd36ff31a822705796e8cb8c18d'; // movr
+  let MIM = process.env.BOND; // movr
   if (network == 'dev') {
     MIM_Contract = await _MIM.deployed();
     MIM = MIM_Contract.address;
@@ -73,7 +66,12 @@ module.exports = async function (deployer, network, accounts) {
   } else {
     MIM_Contract = await _MIM.at(MIM);
   }
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  let OlympusERC20Token;
+  if( ! process.env.DEPLOY_USE_TOKEN ){
+    OlympusERC20Token = await _OlympusERC20Token.deployed();
+  }else{
+    OlympusERC20Token = await _OlympusERC20Token.at(process.env.DEPLOY_USE_TOKEN);
+  }
   const sOlympus = await _sOlympus.deployed();
   const OlympusStaking = await _OlympusStaking.deployed();
 

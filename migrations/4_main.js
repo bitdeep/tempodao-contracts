@@ -1,3 +1,4 @@
+require('dotenv').config();
 // truffle migrate --f 4 --to 4 --network avax
 // truffle run verify OlympusBondDepository OHMCirculatingSupplyContract --network avax
 const _OlympusERC20Token = artifacts.require("OlympusERC20Token");
@@ -52,24 +53,23 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '150';
-  const firstEpochNumber = '7808438';
-  const firstEpochBlock = '7808443';
-  const nextEpochBlock = '7808443';
   const ZERO = '0x0000000000000000000000000000000000000000';
-  const largeApproval = '100000000000000000000000000000000';
-  const initialMint = '10000000000000000000000000';
 
   green('MIM:  start');
   let MIM_Contract;
-  let MIM = '0x130966628846bfd36ff31a822705796e8cb8c18d'; // movr
+  let MIM = process.env.BOND; // movr
   if (network == 'dev') {
     MIM_Contract = await _MIM.deployed();
     MIM = MIM_Contract.address;
   } else if (network == 'ftm') {
     MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
   }
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  let OlympusERC20Token;
+  if( ! process.env.DEPLOY_USE_TOKEN ){
+    OlympusERC20Token = await _OlympusERC20Token.deployed();
+  }else{
+    OlympusERC20Token = await _OlympusERC20Token.at(process.env.DEPLOY_USE_TOKEN);
+  }
   const sOlympus = await _sOlympus.deployed();
   const OlympusStaking = await _OlympusStaking.deployed();
   const StakingHelper = await _StakingHelper.deployed();
@@ -88,11 +88,12 @@ module.exports = async function (deployer, network, accounts) {
 
   await deployer.deploy(_OlympusBondDepository, OlympusERC20Token.address, MIM, OlympusTreasury.address, OlympusDAO.address, ZERO);
   const controlVariable = '5',
-        vestingTerm = '432000',
-        minimumPrice = '4000',
-        maxPayout = '300',
-        fee = '10000',
-        maxDebt = '1000000000000000000000000', initialDebt = '0';
+        vestingTerm = process.env.DEPLOY_BOND_VESTING_TERM,
+        minimumPrice = process.env.DEPLOY_BOND_PRICE,
+        maxPayout = process.env.DEPLOY_REWARD_PCT,
+        fee = process.env.DEPLOY_BOND_FEE,
+        maxDebt = process.env.DEPLOY_BOND_MAX_DEBIT,
+        initialDebt = '0';
   const OlympusBondDepository = await _OlympusBondDepository.deployed();
   await OlympusBondDepository.initializeBondTerms(controlVariable,
     vestingTerm, minimumPrice, maxPayout, fee, maxDebt, initialDebt);

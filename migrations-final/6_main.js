@@ -51,7 +51,7 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '150';
+  const epochLength = '300';
   const firstEpochNumber = '7808438';
   const firstEpochBlock = '7808443';
   const nextEpochBlock = '7808443';
@@ -91,6 +91,7 @@ module.exports = async function (deployer, network, accounts) {
   await OlympusTreasury.toggle('8', OlympusBondingCalculator.address, ZERO)
 
   green('OlympusTreasury Distributor');
+  await Distributor.addRecipient(OlympusStaking.address, '5000')
   await OlympusTreasury.queue('8', Distributor.address)
   await OlympusTreasury.toggle('8', Distributor.address, ZERO)
 

@@ -1,45 +1,5 @@
-/*
-*
-*
-*
-*       SPECIAL TO ADD BONDS
-*       DO NOT EXECUTE IT
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-* */
 // truffle migrate --f 8 --to 8 --network avax
-// truffle run verify OlympusBondDepository@0x4eAF4A5302D15212bEf36D77e60be6766FbFDEf7 --network avax
-
-
-
-
-
-
-
-
-
-// comment this to run it.
-process.exit(0);
-
-
-
-
-
-
-
+// truffle run verify OlympusBondDepository --network avax
 const _OlympusERC20Token = artifacts.require("OlympusERC20Token");
 const _StakingHelper = artifacts.require("StakingHelper");
 const _OlympusTreasury = artifacts.require("OlympusTreasury");
@@ -83,22 +43,18 @@ function magenta() {
 
 module.exports = async function (deployer, network, accounts) {
 
-  const PRINCIPAL = '0x720dD9292B3d0DD78c9afa57aFD948c2eA2D50D8';
-  // const CALCULATOR = '0x0000000000000000000000000000000000000000';
-  const CALCULATOR = '0xac2dfa38adA25553B51726AF4db8089DF5E9FCeE';
+  const PRINCIPAL = '0x4145FBe0ED36A9d2D7a055c31C1C897602Bbb568';
 
   green('PRINCIPAL: '+PRINCIPAL);
-
-  // const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  const ZERO = '0x0000000000000000000000000000000000000000';
+  const OlympusERC20Token = await _OlympusERC20Token.at('0x88a425b738682f58C0FF9fcF2CceB47a361ef4cF');
   const StakingHelper = await _StakingHelper.deployed();
   const OlympusTreasury = await _OlympusTreasury.deployed();
   const OlympusDAO = await _OlympusDAO.deployed();
 
 
   yellow('create bond contract...');
-  await deployer.deploy(_OlympusBondDepository, OlympusERC20Token.address,
-    PRINCIPAL, OlympusTreasury.address, OlympusDAO.address, CALCULATOR);
+  await deployer.deploy(_OlympusBondDepository, OlympusERC20Token.address, PRINCIPAL, OlympusTreasury.address, OlympusDAO.address, ZERO);
   const controlVariable = '5',
         vestingTerm = '100',
         minimumPrice = '1000',

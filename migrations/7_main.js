@@ -1,3 +1,4 @@
+require('dotenv').config();
 // truffle migrate --f 7 --to 7 --network avax
 // truffle run verify  --network avax
 const _OlympusERC20Token = artifacts.require("OlympusERC20Token");
@@ -52,24 +53,21 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '150';
-  const firstEpochNumber = '7808438';
-  const firstEpochBlock = '7808443';
-  const nextEpochBlock = '7808443';
-  const ZERO = '0x0000000000000000000000000000000000000000';
-  const largeApproval = '100000000000000000000000000000000';
-  const initialMint = '10000000000000000000000000';
-
   green('MIM: start');
   let MIM_Contract;
-  let MIM = '0x130966628846bfd36ff31a822705796e8cb8c18d'; // movr
+  let MIM = process.env.BOND; // movr
   if (network == 'dev') {
     MIM_Contract = await _MIM.deployed();
     MIM = MIM_Contract.address;
   } else if (network == 'ftm') {
     MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
   }
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  let OlympusERC20Token;
+  if( ! process.env.DEPLOY_USE_TOKEN ){
+    OlympusERC20Token = await _OlympusERC20Token.deployed();
+  }else{
+    OlympusERC20Token = await _OlympusERC20Token.at(process.env.DEPLOY_USE_TOKEN);
+  }
   const sOlympus = await _sOlympus.deployed();
   const OlympusStaking = await _OlympusStaking.deployed();
   const StakingHelper = await _StakingHelper.deployed();
@@ -85,11 +83,11 @@ module.exports = async function (deployer, network, accounts) {
 
   const RedeemHelper = await _RedeemHelper.deployed();
 
-  // green('OlympusTreasury Distributor');
-  // await OlympusStaking.setContract('1', StakingWarmup.address);
-  // await OlympusStaking.setContract('0', Distributor.address);
-  // await OlympusStaking.setContract('0', Distributor.address);
-/*
+  green('OlympusTreasury Distributor');
+  await OlympusStaking.setContract('1', StakingWarmup.address);
+  await OlympusStaking.setContract('0', Distributor.address);
+
+
   green('OlympusTreasury OlympusStaking 1');
   yellow('\tsOlympus='+sOlympus.address);
   yellow('\tOlympusStaking='+OlympusStaking.address);
@@ -97,10 +95,12 @@ module.exports = async function (deployer, network, accounts) {
   green('OlympusTreasury OlympusStaking 2');
   await sOlympus.setIndex('1000000000');
   green('OlympusTreasury OlympusStaking 3');
-  await OlympusERC20Token.setVault(accounts[0]);
-  await OlympusERC20Token.mint(accounts[0], '10000000000000');
+  if( process.env.DEPLOY_MINT_TOKENS ) {
+    await OlympusERC20Token.setVault(accounts[0]);
+    await OlympusERC20Token.mint(accounts[0], process.env.DEPLOY_MINT_TOKENS);
+  }
   await OlympusERC20Token.setVault(OlympusTreasury.address);
-*/
+
 
   magenta("CONTRACTS")
   green("- MIM: " + MIM);

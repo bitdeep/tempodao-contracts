@@ -1,4 +1,4 @@
-// truffle migrate --f 1 --to 7 --network avax
+// truffle migrate --f 1 --to 1 --network avax
 // truffle run verify OlympusERC20Token sOlympus OlympusStaking --network avax
 const _OlympusERC20Token = artifacts.require("OlympusERC20Token");
 const _sOlympus = artifacts.require("sOlympus");
@@ -18,9 +18,13 @@ module.exports = async function (deployer, network, accounts) {
 
   green('main account: '+accounts);
 
-  const epochLength = '600';
+  const epochLength = '150';
   const firstEpochNumber = '7808438';
   const firstEpochBlock = '7808443';
+  const nextEpochBlock = '7808443';
+  const ZERO = '0x0000000000000000000000000000000000000000';
+  const largeApproval = '100000000000000000000000000000000';
+  const initialMint = '10000000000000000000000000';
 
   green('MIM:  start');
   let MIM_Contract;

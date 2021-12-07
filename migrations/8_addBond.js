@@ -47,7 +47,12 @@ module.exports = async function (deployer, network, accounts) {
 
   green('PRINCIPAL: '+PRINCIPAL);
   const ZERO = '0x0000000000000000000000000000000000000000';
-  const OlympusERC20Token = await _OlympusERC20Token.deployed();
+  let OlympusERC20Token;
+  if( ! process.env.DEPLOY_USE_TOKEN ){
+    OlympusERC20Token = await _OlympusERC20Token.deployed();
+  }else{
+    OlympusERC20Token = await _OlympusERC20Token.at(process.env.DEPLOY_USE_TOKEN);
+  }
   const StakingHelper = await _StakingHelper.deployed();
   const OlympusTreasury = await _OlympusTreasury.deployed();
   const OlympusDAO = await _OlympusDAO.deployed();
