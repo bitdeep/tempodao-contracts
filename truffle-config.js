@@ -1,6 +1,8 @@
 require('dotenv').config();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const PRIVATE_KEY = process.env.PRIVATE_KEY.trim();
+const fs = require('fs');
+const PRIVATE_KEY = fs.readFileSync(".secret").toString().trim();
+
 module.exports = {
   networks: {
     dev: {
@@ -12,7 +14,7 @@ module.exports = {
       provider: () => new HDWalletProvider(
         {
           privateKeys: [PRIVATE_KEY],
-          providerOrUrl: "wss://speedy-nodes-nyc.moralis.io/cb6227e1fc4debe4b81540ef/avalanche/mainnet/ws",
+          providerOrUrl: `wss://speedy-nodes-nyc.moralis.io/${process.env.MORALIS}/avalanche/mainnet/ws`,
           addressIndex: 0
         }),
       network_id: 1,
