@@ -1,3 +1,22 @@
+
+
+
+const PRINCIPAL = '0x130966628846bfd36ff31a822705796e8cb8c18d';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // truffle migrate --f 8 --to 8 --network avax
 // truffle run verify OlympusBondDepository --network avax
 const _OlympusERC20Token = artifacts.require("OlympusERC20Token");
@@ -43,7 +62,7 @@ function magenta() {
 
 module.exports = async function (deployer, network, accounts) {
 
-  const PRINCIPAL = '0x4145FBe0ED36A9d2D7a055c31C1C897602Bbb568';
+
 
   green('PRINCIPAL: '+PRINCIPAL);
   const ZERO = '0x0000000000000000000000000000000000000000';

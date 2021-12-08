@@ -45545,10 +45545,49 @@
   },
   "networks": {
     "1": {
-      "events": {},
+      "events": {
+        "0xaa151555690c956fc3ea32f106bb9f119b5237a061eaa8557cff3e51e3792c8d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipPulled",
+          "type": "event"
+        },
+        "0xea8258f2d9ddb679928cf34b78cf645b7feda9acc828e4dd82d014eaae270eba": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipPushed",
+          "type": "event"
+        }
+      },
       "links": {},
-      "address": "0xDbb14F7e2eB4cab0acf5269785f6bE88b964eE14",
-      "transactionHash": "0x51a3bcf26fa67de026e97eca48d81ed55f612adbaac5918db357541cc62877ff"
+      "address": "0x6323C227f71b30babdd6fe84093027079A955662",
+      "transactionHash": "0x398c90990bc36944bc730b800503f9ca5762c3acc8112f1adeb6e6526a0bcccb"
     },
     "5777": {
       "events": {
@@ -45597,7 +45636,7 @@
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-12-07T18:43:27.476Z",
+  "updatedAt": "2021-12-08T00:11:12.804Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
