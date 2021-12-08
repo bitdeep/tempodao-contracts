@@ -1,7 +1,11 @@
 
-
-
-const PRINCIPAL = '0x130966628846bfd36ff31a822705796e8cb8c18d';
+const PRINCIPAL = '0x130966628846bfd36ff31a822705796e8cb8c18d',
+  controlVariable = '5',
+  vestingTerm = '216000', // 2.5h
+  minimumPrice = '3000', // $30
+  maxPayout = '2500', // 0.25%
+  fee = '10000',
+  maxDebt = '1000000000000000', initialDebt = '0';
 
 
 
@@ -79,12 +83,6 @@ module.exports = async function (deployer, network, accounts) {
 
   yellow('create bond contract...');
   await deployer.deploy(_OlympusBondDepository, OlympusERC20Token.address, PRINCIPAL, OlympusTreasury.address, OlympusDAO.address, ZERO);
-  const controlVariable = '5',
-        vestingTerm = '100',
-        minimumPrice = '1000',
-        maxPayout = '1000',
-        fee = '10000',
-        maxDebt = '1000000000000000', initialDebt = '0';
   const OlympusBondDepository = await _OlympusBondDepository.deployed();
   yellow('initializeBondTerms...');
   await OlympusBondDepository.initializeBondTerms(controlVariable, vestingTerm, minimumPrice, maxPayout, fee, maxDebt, initialDebt);
