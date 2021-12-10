@@ -67,7 +67,7 @@ module.exports = async function (deployer, network, accounts) {
     MIM_Contract = await _MIM.at(MIM);
   }
   let OlympusERC20Token;
-  if( ! process.env.DEPLOY_USE_TOKEN ){
+  if( ! process.env.DEPLOY_USE_TOKEN || network == 'dev' ){
     OlympusERC20Token = await _OlympusERC20Token.deployed();
   }else{
     OlympusERC20Token = await _OlympusERC20Token.at(process.env.DEPLOY_USE_TOKEN);

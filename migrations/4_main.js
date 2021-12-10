@@ -57,7 +57,7 @@ module.exports = async function (deployer, network, accounts) {
 
   green('MIM:  start');
   let MIM_Contract;
-  let MIM = process.env.BOND; // movr
+  let MIM = process.env.DEPLOY_BOND_PRINCIPAL; // movr
   if (network == 'dev') {
     MIM_Contract = await _MIM.deployed();
     MIM = MIM_Contract.address;
@@ -65,7 +65,7 @@ module.exports = async function (deployer, network, accounts) {
     MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
   }
   let OlympusERC20Token;
-  if( ! process.env.DEPLOY_USE_TOKEN ){
+  if( ! process.env.DEPLOY_USE_TOKEN || network == 'dev' ){
     OlympusERC20Token = await _OlympusERC20Token.deployed();
   }else{
     OlympusERC20Token = await _OlympusERC20Token.at(process.env.DEPLOY_USE_TOKEN);

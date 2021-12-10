@@ -42,7 +42,7 @@ module.exports = async function (deployer, network, accounts) {
 
   green('OlympusERC20Token: start');
   let OlympusERC20Token;
-  if( ! process.env.DEPLOY_USE_TOKEN ){
+  if( ! process.env.DEPLOY_USE_TOKEN || network == 'dev' ){
     await deployer.deploy(_OlympusERC20Token);
     OlympusERC20Token = await _OlympusERC20Token.deployed();
   }else{

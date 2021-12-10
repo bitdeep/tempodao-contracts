@@ -63,7 +63,7 @@ module.exports = async function (deployer, network, accounts) {
     MIM = '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e'; // ftm
   }
   let OlympusERC20Token;
-  if( ! process.env.DEPLOY_USE_TOKEN ){
+  if( ! process.env.DEPLOY_USE_TOKEN || network == 'dev' ){
     OlympusERC20Token = await _OlympusERC20Token.deployed();
   }else{
     OlympusERC20Token = await _OlympusERC20Token.at(process.env.DEPLOY_USE_TOKEN);
@@ -103,19 +103,19 @@ module.exports = async function (deployer, network, accounts) {
 
 
   magenta("CONTRACTS")
-  green("- MIM: " + MIM);
-  green("- OlympusERC20Token: " + OlympusERC20Token.address);
-  green("- sOlympus: " + sOlympus.address);
-  green("- OlympusStaking: " + OlympusStaking.address);
-  green("- StakingHelper: " + StakingHelper.address);
-  green("- OlympusTreasury: " + OlympusTreasury.address);
-  green("- StakingWarmup: " + StakingWarmup.address);
-  green("- OlympusDAO: " + OlympusDAO.address);
-  green("- OlympusBondingCalculator: " + OlympusBondingCalculator.address);
-  green("- Distributor: " + Distributor.address);
-  green("- OHMCirculatingSupplyContract: " + OHMCirculatingSupplyContract.address);
-  green("- OlympusBondDepository: " + OlympusBondDepository.address);
-  green("- RedeemHelper: " + RedeemHelper.address);
+  blue("- MIM: " + MIM);
+  blue("- OlympusERC20Token: " + OlympusERC20Token.address);
+  blue("- sOlympus: " + sOlympus.address);
+  blue("- OlympusStaking: " + OlympusStaking.address);
+  blue("- StakingHelper: " + StakingHelper.address);
+  blue("- OlympusTreasury: " + OlympusTreasury.address);
+  blue("- StakingWarmup: " + StakingWarmup.address);
+  blue("- OlympusDAO: " + OlympusDAO.address);
+  blue("- OlympusBondingCalculator: " + OlympusBondingCalculator.address);
+  blue("- Distributor: " + Distributor.address);
+  blue("- OHMCirculatingSupplyContract: " + OHMCirculatingSupplyContract.address);
+  blue("- OlympusBondDepository: " + OlympusBondDepository.address);
+  blue("- RedeemHelper: " + RedeemHelper.address);
 
 };
 
