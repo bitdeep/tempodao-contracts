@@ -19,9 +19,9 @@ const OlympusTreasury = artifacts.require("OlympusTreasury");
 module.exports = async function (deployer, network, accounts) {
   const treasure = await OlympusTreasury.at('0x2af791E7EBa7efF93485CF8516bAf7bdc94d4db7');
   await treasure.queue('0', bondContract)
-  await treasure.toggle('0', bondContract, ZERO)
+  await treasure.toggle('0', bondContract, bondContract)
   await treasure.queue('4', bondContract)
-  await treasure.toggle('4', bondContract, ZERO)
+  await treasure.toggle('4', bondContract, bondContract)
 
   process.exit(0);
 };
